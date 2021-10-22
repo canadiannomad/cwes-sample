@@ -1,9 +1,12 @@
 FROM node:lts-alpine
-WORKDIR /usr/src/app
+
 # ENV DEBUG ioredis:*
-RUN apk add --no-cache bash && chown -R node:node /usr/src/app
+RUN apk add --no-cache bash 
 USER node:node
 COPY --chown=node:node . /usr/src/app
-RUN yarn install
-RUN yarn build
+WORKDIR /usr/src/app
+RUN yarn install \
+ && yarn build \
+ && yarn cache clean --all
+ 
 CMD ["/bin/sh", "-c", "yarn test"]
